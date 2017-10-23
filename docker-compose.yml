@@ -1,0 +1,20 @@
+version: '3.1'
+
+services:
+    nodervisor:
+        build:
+            context: ../nodervisor
+            args:
+                TZ: "America/New_York"
+        image: nodervisor:20170820
+        container_name: nodervisor
+        hostname: nodervisor
+#        restart: unless-stopped
+        environment:
+            TZ: "America/New_York"
+        volumes:
+                - ../nodervisor/opt:/opt
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
