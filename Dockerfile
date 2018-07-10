@@ -1,31 +1,35 @@
-FROM node:8.7.0-alpine
+ARG FROM_BASE=supervisord:${CONTAINER_TAG:-latest}
+FROM $FROM_BASE
 
-ARG TZ=UTC
+# name and version of this docker image
+ARG CONTAINER_NAME=nodervisor
+ARG CONTAINER_VERSION=${CONTAINER_VERSION:-3.0.0}
 
-COPY nodervisor.tgz /tmp
+LABEL org_name=$CONTAINER_NAME \
+      version=$CONTAINER_VERSION 
 
-ENV VERSION=0.4 \
-    BLD_PKGS="alpine-sdk" \
-    CORE_PKGS="supervisor tzdata"
+# Specify CBF version to use with our configuration and customizations
+ARG CBF_VERSION="${CBF_VERSION}"
+# include our project files
+COPY build Dockerfile /tmp/
+# set to non zero for the framework to show verbose action scripts
+#    (0:default, 1:trace & do not cleanup; 2:continue after errors)
+ENV DEBUG_TRACE=0
 
-ADD docker-entrypoint.sh /
 
-# Run-time Dependencies
-RUN set -e \
-    && apk update \
-    && apk add --no-cache $CORE_PKGS $BLD_PKGS \
-    && echo "$TZ" > /etc/TZ \
-    && cp /usr/share/zoneinfo/$TZ /etc/timezone \
-    && cp /usr/share/zoneinfo/$TZ /etc/localtime \
-    && cd /tmp \
-    && tar xzf nodervisor.tgz \
-    && cd nodervisor \
-    && npm install node-gyp async express-session bcrypt connect-session-knex ejs express knex mysql sqlite3 stylus supervisord \
-    && npm install \
-    && chmod u+rx,g+rx,o+rx,a-w /docker-entrypoint.sh \
-    && apk del $BLD_PKGS
+ARG NODERVISOR_USER=nodervisor
+ENV NODERVISOR_HOME=/usr/local/nodervisor
 
-EXPOSE 3000
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+# build content
+RUN set -o verbose \
+    && chmod u+rwx /tmp/build.sh \
+    && /tmp/build.sh "$CONTAINER_NAME" "$DEBUG_TRACE"
+RUN [ $DEBUG_TRACE != 0 ] || rm -rf /tmp/* 
+
+
+WORKDIR $NODERVISOR_HOME
+
+ENTRYPOINT [ "docker-entrypoint.sh" ]
+#CMD ["$CONTAINER_NAME"]
 CMD ["nodervisor"]

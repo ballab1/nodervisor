@@ -1,0 +1,10 @@
+#!/bin/bash
+
+declare -A nodervisor=(
+    ['user']=${NODERVISOR_USER:-nodervisor}
+    ['uid']="${NODERVISOR_UID:-$(nodervisor.UID "$NODERVISOR_USER")}"
+    ['group']=${NODERVISOR_GROUP:-nodervisor}
+    ['gid']="${NODERVISOR_GID:-$(nodervisor.GID "$NODERVISOR_GROUP")}"
+    ['shell']=/bin/bash
+    ['home']="${NODERVISOR_HOME:-/usr/local/nodervisor}"
+)
