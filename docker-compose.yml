@@ -21,7 +21,7 @@ services:
                 container.git.url: $CONTAINER_GIT_URL
                 container.origin: $CONTAINER_ORIGIN
                 container.original.name: nodervisor
-        container_name: nodervisor
+        container_name: supervisorm
         environment:
             DEBUG_TRACE: ${DEBUG_TRACE:-0}
             SUPERVISORD_PASS: $CFG_PASS
