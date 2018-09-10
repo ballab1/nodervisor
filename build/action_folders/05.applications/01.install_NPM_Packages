@@ -1,6 +1,6 @@
 #!/bin/bash
 
-printf "\n    %s\n" 'prepare and install NodeJS stuff'
+printf '\n    %s\n' 'prepare and install NodeJS stuff'
 
 mkdir -p "$NODERVISOR_HOME"
 cd /tmp
