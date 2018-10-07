@@ -14,6 +14,11 @@ COPY build Dockerfile /tmp/
 ENV DEBUG_TRACE=0
 
 
+# zookeeper version being bundled in this docker image
+ARG NODERVISOR_VERSION=master
+LABEL nodervisor.version=$NODERVISOR_VERSION 
+
+
 ARG NODERVISOR_USER=nodervisor
 ENV NODERVISOR_HOME=/usr/local/nodervisor
 
