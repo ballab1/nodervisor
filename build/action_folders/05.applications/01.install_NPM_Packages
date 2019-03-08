@@ -1,0 +1,31 @@
+#!/bin/bash
+
+printf "\n    %s\n" 'prepare and install NodeJS stuff'
+
+mkdir -p "$NODERVISOR_HOME"
+cd /tmp
+tar xzf "${NODERVISOR['file']}"
+mv "${NODERVISOR['dir']}"/* "$NODERVISOR_HOME"
+
+cd "$NODERVISOR_HOME"
+
+
+# prevent:  "Error: EACCES, permission denied '/root/.config/configstore/insight-yo.json'"
+#           https://github.com/keystonejs/keystone/issues/1566
+mkdir -p /root/.config/configstore
+chmod g+rwx /root /root/.config /root/.config/configstore 
+
+#npm install --save node-pre-gyp -g
+#npm install --save sqlite3@4.0.1    
+#npm install --save bcrypt-nodejs
+#npm uninstall --save bcrypt
+#npm install express --global
+sed -i -e 's|"bcrypt": "0.8.0"|"bcrypt": "^1.0.3"|' -e 's|"sqlite3": "^2.2.7"|"sqlite3": "^3.1.13"|' package.json
+npm install
+
+
+if [ -e npm-debug.log ]; then
+    echo '---npm-debug.log-------------------------------------------------------------------'
+    cat npm-debug.log
+    echo '-----------------------------------------------------------------------------------'
+fi

@@ -1,0 +1,3 @@
+[project]
+container_name=nodervisor_container
+friendly_name=nodervisor
