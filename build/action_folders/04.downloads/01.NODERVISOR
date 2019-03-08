@@ -1,0 +1,10 @@
+#!/bin/bash
+
+declare -A NODERVISOR=()
+NODERVISOR['version']=${NODERVISOR_VERSION:?}
+NODERVISOR['file']="/tmp/nodervisor.tar.gz"
+NODERVISOR['dir']="/tmp/nodervisor-${NODERVISOR['version']}"
+NODERVISOR['url']="https://github.com/TAKEALOT/nodervisor/archive/${NODERVISOR['version']}.tar.gz"
+NODERVISOR['sha256_e97902f019cc929aa5f68a57bd92748887ac95d2']="d36b4e81eb47cbf69f1802df803b849bcb9cd40cefa9a135e18462fbb25306db"
+NODERVISOR['sha256']="${NODERVISOR['sha256_'${NODERVISOR['version']}]}" 
+NODERVISOR['home']=${NODERVISOR_HOME:-/usr/local/nodervisor}

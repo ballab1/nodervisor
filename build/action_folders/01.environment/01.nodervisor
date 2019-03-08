@@ -1,0 +1,18 @@
+#!/bin/bash
+
+declare -ar env_nodervisor=(
+    'NODERVISOR_USER="${NODERVISOR_USER:-nodervisor}"'
+    'NODERVISOR_UID="${NODERVISOR_UID:-$(nodervisor.UID "$NODERVISOR_USER")}"'
+    'NODERVISOR_GROUP="${NODERVISOR_GROUP:-nodervisor}"'
+    'NODERVISOR_GID="${NODERVISOR_GID:-$(nodervisor.GID "$NODERVISOR_GROUP")}"'
+    'NODERVISOR_HOME="${NODERVISOR_HOME:-/usr/local/nodervisor}"'
+    'EXTERNAL_SCRIPTS="${NODERVISOR_HOME}/external-scripts.json"'
+    'PATH="${NODERVISOR_HOME}/node_modules/.bin:${NODERVISOR_HOME}/node_modules/nodervisor/node_modules/.bin:${PATH}"'
+    'WORKDIR=${NODERVISOR_HOME}'
+    'USER="${NODERVISOR_UID}"'
+)
+
+#remove WORKDIR so it comes after NODERVISOR
+crf.removeFromRuntimeEnvironment 'USER'
+crf.removeFromRuntimeEnvironment 'WORKDIR'
+crf.updateRuntimeEnvironment "${env_nodervisor[@]}" 

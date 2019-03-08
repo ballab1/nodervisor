@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd "${NODERVISOR_HOME}"
+crf.fixupDirectory "${NODERVISOR_HOME}" "${NODERVISOR_UID}"

@@ -1,0 +1,5 @@
+# nodervisor packages
+
+declare -a PKGS=( curl
+                  wget
+                  zip )
