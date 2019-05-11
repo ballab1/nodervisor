@@ -29,5 +29,25 @@ services:
         container_name: supervisorm
         environment:
             DEBUG_TRACE: ${DEBUG_TRACE:-0}
+            SUPERVISORD_PASS_FILE: /run/secrets/supervisord.pwd
+            SUPERVISORD_USER: $CFG_USER
         hostname: nodervisor
         image: ${DOCKER_REGISTRY:-ubuntu-s2:5000/}${CONTAINER_OS:-alpine}/nodervisor:${CONTAINER_TAG:-latest}
+        logging:
+            driver: json-file
+            options:
+                max-file: "3"
+                max-size: "10m"
+        ports:
+            - 8081:3000
+            - 8123:8123
+# only use when building a 'service container' # only use when building a 'service container'
+#        restart: unless-stopped
+        secrets:
+            - supervisord.pwd
+        volumes:
+            - ./vols/log:/var/log
+
+secrets:
+   supervisord.pwd:
+     file: ~/.inf/secrets/bobb.password
